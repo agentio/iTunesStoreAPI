@@ -1,0 +1,25 @@
+
+A Go interface to the iTunes Store API.
+
+==============================================================
+
+package main
+
+import (
+	"fmt"
+	"github.com/agentio/iTunesStoreAPI"
+)
+
+func main() {	
+	feed, err := iTunesStoreAPI.FetchAppList("toppaidapplications", 0, 2)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", feed)
+	
+	item, err := iTunesStoreAPI.LookupItemWithId("896861219")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", item)
+}
