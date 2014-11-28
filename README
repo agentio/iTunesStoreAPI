@@ -10,8 +10,14 @@ import (
 	"github.com/agentio/iTunesStoreAPI"
 )
 
-func main() {	
+func main() {
 	feed, err := iTunesStoreAPI.FetchAppList("toppaidapplications", 0, 2)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", feed)
+
+	feed, err := iTunesStoreAPI.FetchAppListForCountry("toppaidapplications", "us", 0, 2)
 	if err != nil {
 		panic(err)
 	}

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 type Connection struct {
@@ -141,16 +140,26 @@ type Feed struct {
 }
 
 func FetchAppList(category string, genre, limit int) (feed *Feed, err error) {
-	link := "https://itunes.apple.com/us/rss/" + category + "/limit=" + strconv.Itoa(limit) + "/genre=" + strconv.Itoa(genre) + "/xml"
-	response, err := http.Get(link)
+	return FetchAppListForCountry(category, "", genre, limit)
+}
+
+func FetchAppListForCountry(category string, countryCode string, genre, limit int) (feed *Feed, err error) {
+	if countryCode == "" {
+		countryCode = "us"
+	}
+
+	url := fmt.Sprintf("https://itunes.apple.com/%s/rss/%s/limit=%d/genre=%d/xml", countryCode, category, limit, genre)
+
+	response, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
+
 	contents, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
-	//fmt.Printf("%+v\n", string(contents))
+
 	feed = &Feed{}
 	err = xml.Unmarshal(contents, &feed)
 	return feed, err
