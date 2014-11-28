@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 )
 
 type Connection struct {
@@ -141,16 +140,26 @@ type Feed struct {
 }
 
 func FetchAppList(category string, genre, limit int) (feed *Feed, err error) {
-	link := "https://itunes.apple.com/us/rss/" + category + "/limit=" + strconv.Itoa(limit) + "/genre=" + strconv.Itoa(genre) + "/xml"
-	response, err := http.Get(link)
+	return FetchAppListForCountry(category, "", genre, limit)
+}
+
+func FetchAppListForCountry(category string, countryCode string, genre, limit int) (feed *Feed, err error) {
+	if countryCode == "" {
+		countryCode = "us"
+	}
+
+	url := fmt.Sprintf("https://itunes.apple.com/%s/rss/%s/limit=%d/genre=%d/xml", countryCode, category, limit, genre)
+
+	response, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
+
 	contents, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return nil, err
 	}
-	//fmt.Printf("%+v\n", string(contents))
+
 	feed = &Feed{}
 	err = xml.Unmarshal(contents, &feed)
 	return feed, err
@@ -227,10 +236,19 @@ type ResultSet struct {
 	Results     []Result `json:"results"`
 }
 
-func LookupItemWithId(appid string) (results *ResultSet, err error) {
-	link := "http://itunes.apple.com/lookup?id=" + appid
+func LookupItemWithId(itemId string) (results *ResultSet, err error) {
+	return LookupItemWithIdInCountry(itemId, "")
+}
 
-	response, err := http.Get(link)
+func LookupItemWithIdInCountry(itemId, countryCode string) (results *ResultSet, err error) {
+	var url string
+	if countryCode == "" {
+		url = "http://itunes.apple.com/lookup?id=" + itemId
+	} else {
+		url = "http://itunes.apple.com/" + countryCode + "/lookup?id=" + itemId
+	}
+
+	response, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}

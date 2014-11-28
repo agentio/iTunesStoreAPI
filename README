@@ -10,16 +10,32 @@ import (
 	"github.com/agentio/iTunesStoreAPI"
 )
 
-func main() {	
+func main() {
+	// Fetch top paid applications from the US iTunes store
 	feed, err := iTunesStoreAPI.FetchAppList("toppaidapplications", 0, 2)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("%+v\n", feed)
-	
-	item, err := iTunesStoreAPI.LookupItemWithId("896861219")
+
+	// Fetch top paid applications from an iTunes store for a specific country
+	feed, err := iTunesStoreAPI.FetchAppListForCountry("toppaidapplications", "us", 0, 2)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%+v\n", item)
+	fmt.Printf("%+v\n", feed)
+	
+	// Look up a globally available item in the iTunes store
+	results, err := iTunesStoreAPI.LookupItemWithId("896861219")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", results)
+
+	// Look up an item in an iTunes store for a specific country
+	results, err := iTunesStoreAPI.LookupItemWithIdInCountry("896861219", "us")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", results)
 }
