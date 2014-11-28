@@ -17,9 +17,15 @@ func main() {
 	}
 	fmt.Printf("%+v\n", feed)
 	
-	item, err := iTunesStoreAPI.LookupItemWithId("896861219")
+	results, err := iTunesStoreAPI.LookupItemWithId("896861219")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%+v\n", item)
+	fmt.Printf("%+v\n", results)
+
+	results, err := iTunesStoreAPI.LookupItemWithIdInCountry("896861219", "us")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%+v\n", results)
 }

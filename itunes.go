@@ -227,10 +227,19 @@ type ResultSet struct {
 	Results     []Result `json:"results"`
 }
 
-func LookupItemWithId(appid string) (results *ResultSet, err error) {
-	link := "http://itunes.apple.com/lookup?id=" + appid
+func LookupItemWithId(itemId string) (results *ResultSet, err error) {
+	return LookupItemWithIdInCountry(itemId, "")
+}
 
-	response, err := http.Get(link)
+func LookupItemWithIdInCountry(itemId, countryCode string) (results *ResultSet, err error) {
+	var url string
+	if countryCode == "" {
+		url = "http://itunes.apple.com/lookup?id=" + itemId
+	} else {
+		url = "http://itunes.apple.com/" + countryCode + "/lookup?id=" + itemId
+	}
+
+	response, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
