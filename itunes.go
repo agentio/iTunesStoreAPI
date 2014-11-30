@@ -169,13 +169,11 @@ func (self *Connection) requestForArguments(requestURL string) (req http.Request
 
 func (connection *Connection) FetchAppList(category string, genre, limit int) (feed *Feed, err error) {
 	link := "https://itunes.apple.com/us/rss/" + category + "/limit=" + strconv.Itoa(limit) + "/genre=" + strconv.Itoa(genre) + "/xml"
-
 	httpRequest, err := http.NewRequest("GET", link, nil)
 	contents, err := connection.performRequest(httpRequest)
 	if err != nil {
 		return nil, err
 	}
-	//fmt.Printf("%+v\n", string(contents))
 	feed = &Feed{}
 	err = xml.Unmarshal(contents, &feed)
 	return feed, err
@@ -230,7 +228,6 @@ type ResultSet struct {
 
 func (connection *Connection) LookupItemWithId(appid string) (results *ResultSet, err error) {
 	link := "http://itunes.apple.com/lookup?id=" + appid
-
 	httpRequest, err := http.NewRequest("GET", link, nil)
 	contents, err := connection.performRequest(httpRequest)
 	if err != nil {

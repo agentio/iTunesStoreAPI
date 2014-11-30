@@ -10,14 +10,19 @@ import (
 	"github.com/agentio/iTunesStoreAPI"
 )
 
-func main() {	
-	feed, err := iTunesStoreAPI.FetchAppList("toppaidapplications", 0, 2)
+func main() {
+
+	itunes := iTunesStoreAPI.Connection{
+		Country: "US",
+	}
+
+	feed, err := itunes.FetchAppList("toppaidapplications", 0, 2)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Printf("%+v\n", feed)
-	
-	item, err := iTunesStoreAPI.LookupItemWithId("896861219")
+
+	item, err := itunes.LookupItemWithId("896861219")
 	if err != nil {
 		panic(err)
 	}
