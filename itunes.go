@@ -11,6 +11,7 @@ import (
 
 type Connection struct {
 	Country string
+	Client  *http.Client
 }
 
 var Categories = map[string]string{
@@ -140,25 +141,11 @@ type Feed struct {
 	Entries []Entry  `xml:"entry"`
 }
 
-func FetchAppList(category string, genre, limit int) (feed *Feed, err error) {
-	link := "https://itunes.apple.com/us/rss/" + category + "/limit=" + strconv.Itoa(limit) + "/genre=" + strconv.Itoa(genre) + "/xml"
-	response, err := http.Get(link)
-	if err != nil {
-		return nil, err
+func (connection *Connection) performRequest(req *http.Request) (contents []byte, err error) {
+	if connection.Client == nil {
+		connection.Client = &http.Client{}
 	}
-	contents, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return nil, err
-	}
-	//fmt.Printf("%+v\n", string(contents))
-	feed = &Feed{}
-	err = xml.Unmarshal(contents, &feed)
-	return feed, err
-}
-
-func (self Connection) performRequest(req *http.Request) (contents []byte, err error) {
-	client := &http.Client{}
-	response, err := client.Do(req)
+	response, err := connection.Client.Do(req)
 	if err != nil {
 		return
 	}
@@ -174,10 +161,24 @@ func (self Connection) performRequest(req *http.Request) (contents []byte, err e
 	return contents, err
 }
 
-func (self Connection) requestForArguments(requestURL string) (req http.Request, err error) {
+func (self *Connection) requestForArguments(requestURL string) (req http.Request, err error) {
 	newreq, err := http.NewRequest("GET", requestURL, nil)
 	req = *newreq
 	return req, err
+}
+
+func (connection *Connection) FetchAppList(category string, genre, limit int) (feed *Feed, err error) {
+	link := "https://itunes.apple.com/us/rss/" + category + "/limit=" + strconv.Itoa(limit) + "/genre=" + strconv.Itoa(genre) + "/xml"
+
+	httpRequest, err := http.NewRequest("GET", link, nil)
+	contents, err := connection.performRequest(httpRequest)
+	if err != nil {
+		return nil, err
+	}
+	//fmt.Printf("%+v\n", string(contents))
+	feed = &Feed{}
+	err = xml.Unmarshal(contents, &feed)
+	return feed, err
 }
 
 type Result struct {
@@ -227,14 +228,11 @@ type ResultSet struct {
 	Results     []Result `json:"results"`
 }
 
-func LookupItemWithId(appid string) (results *ResultSet, err error) {
+func (connection *Connection) LookupItemWithId(appid string) (results *ResultSet, err error) {
 	link := "http://itunes.apple.com/lookup?id=" + appid
 
-	response, err := http.Get(link)
-	if err != nil {
-		return nil, err
-	}
-	contents, err := ioutil.ReadAll(response.Body)
+	httpRequest, err := http.NewRequest("GET", link, nil)
+	contents, err := connection.performRequest(httpRequest)
 	if err != nil {
 		return nil, err
 	}
