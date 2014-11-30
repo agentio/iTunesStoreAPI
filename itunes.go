@@ -102,7 +102,7 @@ type ItemId struct {
 type Image struct {
 	XMLName xml.Name `xml:"image"`
 	URL     string   `xml:",innerxml"`
-	Height  uint16   `xml:"height,attr"`
+	Height  int16   `xml:"height,attr"`
 }
 
 type ReleaseDate struct {
