@@ -9,47 +9,57 @@ import (
 	"strconv"
 )
 
+type Category struct {
+	Id   string
+	Name string
+}
+
+var Categories = []Category{
+	{"topfreeapplications", "Top Free Applications"},
+	{"toppaidapplications", "Top Paid Applications"},
+	{"topgrossingapplications", "Top Grossing Applications"},
+	{"topfreeipadapplications", "Top Free iPad Applications"},
+	{"toppaidipadapplications", "Top Paid iPad Applications"},
+	{"topgrossingipadapplications", "Top Grossing iPad Applications"},
+	{"newapplications", "New Applications"},
+	{"newfreeapplications", "New Free Applications"},
+	{"newpaidapplications", "New Paid Applications"},
+}
+
+type Genre struct {
+	Id   int
+	Name string
+}
+
+var Genres = []Genre{
+	{0, "All"},
+	{6000, "Business"},
+	{6001, "Weather"},
+	{6002, "Utilities"},
+	{6003, "Travel"},
+	{6004, "Sports"},
+	{6005, "Social Networking"},
+	{6006, "Reference"},
+	{6007, "Productivity"},
+	{6008, "Photo & Video"},
+	{6009, "News"},
+	{6010, "Navigation"},
+	{6011, "Music"},
+	{6012, "Lifestyle"},
+	{6013, "Health & Fitness"},
+	{6014, "Games"},
+	{6015, "Finance"},
+	{6016, "Entertainment"},
+	{6017, "Education"},
+	{6018, "Books"},
+	{6020, "Medical"},
+	{6021, "Newsstand"},
+	{6022, "Catalogs"},
+}
+
 type Connection struct {
 	Country string
 	Client  *http.Client
-}
-
-var Categories = map[string]string{
-	"topfreeapplications":         "Top Free Applications",
-	"toppaidapplications":         "Top Paid Applications",
-	"topgrossingapplications":     "Top Grossing Applications",
-	"topfreeipadapplications":     "Top Free iPad Applications",
-	"toppaidipadapplications":     "Top Paid iPad Applications",
-	"topgrossingipadapplications": "Top Grossing iPad Applications",
-	"newapplications":             "New Applications",
-	"newfreeapplications":         "New Free Applications",
-	"newpaidapplications":         "New Paid Applications",
-}
-
-var Genres = map[int]string{
-	0:    "All",
-	6000: "Business",
-	6001: "Weather",
-	6002: "Utilities",
-	6003: "Travel",
-	6004: "Sports",
-	6005: "Social Networking",
-	6006: "Reference",
-	6007: "Productivity",
-	6008: "Photo & Video",
-	6009: "News",
-	6010: "Navigation",
-	6011: "Music",
-	6012: "Lifestyle",
-	6013: "Health & Fitness",
-	6014: "Games",
-	6015: "Finance",
-	6016: "Entertainment",
-	6017: "Education",
-	6018: "Books",
-	6020: "Medical",
-	6021: "Newsstand",
-	6022: "Catalogs",
 }
 
 type Link struct {
@@ -65,7 +75,7 @@ type ContentType struct {
 	Label   string   `xml:"label,attr"`
 }
 
-type Category struct {
+type FeedCategory struct {
 	XMLName xml.Name `xml:"category"`
 	Id      string   `xml:"id,attr"`
 	Term    string   `xml:"term,attr"`
@@ -102,7 +112,7 @@ type ItemId struct {
 type Image struct {
 	XMLName xml.Name `xml:"image"`
 	URL     string   `xml:",innerxml"`
-	Height  int16   `xml:"height,attr"`
+	Height  int16    `xml:"height,attr"`
 }
 
 type ReleaseDate struct {
@@ -112,21 +122,21 @@ type ReleaseDate struct {
 }
 
 type Entry struct {
-	XMLName     xml.Name    `xml:"entry"`
-	Updated     string      `xml:"updated"`
-	Id          ItemId      `xml:"id"`
-	Title       string      `xml:"title"`
-	Summary     string      `xml:"summary"`
-	Name        string      `xml:"name"`
-	Link        Link        `xml:"link"`
-	ContentType ContentType `xml:"contentType"`
-	Categories  []Category  `xml:"category"`
-	Artists     []Artist    `xml:"artist"`
-	Price       Price       `xml:"price"`
-	Images      []Image     `xml:"image"`
-	Rights      string      `xml:"rights"`
-	ReleaseDate ReleaseDate `xml:"releaseDate"`
-	Content     string      `xml:"content"`
+	XMLName     xml.Name       `xml:"entry"`
+	Updated     string         `xml:"updated"`
+	Id          ItemId         `xml:"id"`
+	Title       string         `xml:"title"`
+	Summary     string         `xml:"summary"`
+	Name        string         `xml:"name"`
+	Link        Link           `xml:"link"`
+	ContentType ContentType    `xml:"contentType"`
+	Categories  []FeedCategory `xml:"category"`
+	Artists     []Artist       `xml:"artist"`
+	Price       Price          `xml:"price"`
+	Images      []Image        `xml:"image"`
+	Rights      string         `xml:"rights"`
+	ReleaseDate ReleaseDate    `xml:"releaseDate"`
+	Content     string         `xml:"content"`
 }
 
 type Feed struct {
