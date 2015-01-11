@@ -229,6 +229,15 @@ type Result struct {
 	TrackContentRating                 string   `json:"trackContentRating"`
 	AverageUserRating                  float32  `json:"averageUserRating"`
 	UserRatingCount                    int      `json:"userRatingCount"`
+	CollectionCensoredName             string   `json:"collectionCensoredName"`
+	CollectionId                       int      `json:"collectionId"`
+	CollectionExplicitness             string   `json:"collectionExplicitness"`
+	CollectionName                     string   `json:"collectionName"`
+	CollectionPrice                    float32  `json:"collectionPrice"`
+	CollectionType                     string   `json:"collectionType"`
+	CollectionViewURL                  string   `json:"collectionViewUrl"`
+	Country                            string   `json:"country"`
+	TrackCount                         int      `json:"trackCount"`
 }
 
 type ResultSet struct {
