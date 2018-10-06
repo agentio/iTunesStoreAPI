@@ -115,6 +115,12 @@ type Image struct {
 	Height  int16    `xml:"height,attr"`
 }
 
+type CurrentVersionReleaseDate struct {
+	XMLName xml.Name `xml:"currentVersionReleaseDate"`
+	Date    string   `xml:",innerxml"`
+	Label   string   `xml:"label,attr"`
+}
+
 type ReleaseDate struct {
 	XMLName xml.Name `xml:"releaseDate"`
 	Date    string   `xml:",innerxml"`
@@ -122,21 +128,22 @@ type ReleaseDate struct {
 }
 
 type Entry struct {
-	XMLName     xml.Name       `xml:"entry"`
-	Updated     string         `xml:"updated"`
-	Id          ItemId         `xml:"id"`
-	Title       string         `xml:"title"`
-	Summary     string         `xml:"summary"`
-	Name        string         `xml:"name"`
-	Link        Link           `xml:"link"`
-	ContentType ContentType    `xml:"contentType"`
-	Categories  []FeedCategory `xml:"category"`
-	Artists     []Artist       `xml:"artist"`
-	Price       Price          `xml:"price"`
-	Images      []Image        `xml:"image"`
-	Rights      string         `xml:"rights"`
-	ReleaseDate ReleaseDate    `xml:"releaseDate"`
-	Content     string         `xml:"content"`
+	XMLName                   xml.Name       `xml:"entry"`
+	Updated                   string         `xml:"updated"`
+	Id                        ItemId         `xml:"id"`
+	Title                     string         `xml:"title"`
+	Summary                   string         `xml:"summary"`
+	Name                      string         `xml:"name"`
+	Link                      Link           `xml:"link"`
+	ContentType               ContentType    `xml:"contentType"`
+	Categories                []FeedCategory `xml:"category"`
+	Artists                   []Artist       `xml:"artist"`
+	Price                     Price          `xml:"price"`
+	Images                    []Image        `xml:"image"`
+	Rights                    string         `xml:"rights"`
+	ReleaseDate               ReleaseDate    `xml:"releaseDate"`
+	CurrentVersionReleaseDate ReleaseDate    `xml:"currentVersionReleaseDate"`
+	Content                   string         `xml:"content"`
 }
 
 type Feed struct {
@@ -200,7 +207,7 @@ type Result struct {
 	ArtworkUrl512                      string   `json:"artworkUrl512"`
 	ScreenshotURLs                     []string `json:"screenshotURLs"`
 	IPadScreenshotURLs                 []string `json:"ipadScreenshotUrls"`
-	ArtistId                           int      `json:"artistId"`
+	ArtistId                           string   `json:"artistId"`
 	ArtistName                         string   `json:"artistName"`
 	Price                              float32  `json:"price"`
 	Version                            string   `json:"version"`
@@ -209,6 +216,7 @@ type Result struct {
 	Genres                             []string `json:"genres"`
 	GenreIds                           []string `json:"genreIds"`
 	ReleaseDate                        string   `json:"releaseDate"`
+	CurrentVersionReleaseDate          string   `json:"currentVersionReleaseDate"`
 	SellerName                         string   `json:"sellerName"`
 	BundleId                           string   `json:"bundleId"`
 	TrackId                            int      `json:"trackId"`
