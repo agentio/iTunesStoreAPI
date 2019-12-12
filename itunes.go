@@ -207,7 +207,7 @@ type Result struct {
 	ArtworkUrl512                      string   `json:"artworkUrl512"`
 	ScreenshotURLs                     []string `json:"screenshotURLs"`
 	IPadScreenshotURLs                 []string `json:"ipadScreenshotUrls"`
-	ArtistId                           string   `json:"artistId"`
+	ArtistId                           int      `json:"artistId"`
 	ArtistName                         string   `json:"artistName"`
 	Price                              float32  `json:"price"`
 	Version                            string   `json:"version"`
